@@ -2,7 +2,7 @@ import sqlite3
 import pandas
 
 
-companyValue = 95273  # define initial company value
+companyValue = 0  # define initial company value
 
 
 class DatabaseConnection:
@@ -20,7 +20,6 @@ class DatabaseConnection:
         else:
             self.connection.commit()
             self.connection.close()
-#            print('commited')
 
 
 # import csv into db
@@ -64,13 +63,10 @@ for row in memberdata:
     mi = float(row[1])
     investment = float(row[2])
 
-#    print(f'test printing {name} {mi} and {investment}')
-
     if mi == 0:
         print(f"detecting {name} as new investor... adjusting {name}'s membership interest.")
 
         pi_value = investment / companyValue
-        #print(companyValue)
         mi = ((mi + .75 * pi_value) / (1 + pi_value))
 
         update_mi(mi, name)
@@ -79,7 +75,6 @@ for row in memberdata:
         companyValue = companyValue + investment
 
         print(f"{name}'s membership interest is now {mi}. Proceeding to adjust everyone else's membership interest...")
-        #print(f'test printing {name} {mi} and {investment}; pivalue is {pi_value}')
 
         update_mi(mi, name)
 
@@ -95,16 +90,11 @@ for row in memberdata:
             mi = float(x[1])
             investment = float(x[2])
 
-#            print('printing stopper name ' + stoppername)
-#            print(f'test printing {name} {mi} and {investment}')
             if name != stoppername and mi != 0:
-                #print(companyValue)
-                #pi_value = investment / companyValue  # removing; has to be only the person who had 0 initially
 
                 mi = mi / (1 + pi_value)
                 update_mi(mi, name)
                 print(f"{name}'s membership interest has been adjusted, and it is now {mi}")
-                #print(f'test printing {name} {mi} and {investment}; pivalue is {pi_value}')
 
             else:
                 pass
